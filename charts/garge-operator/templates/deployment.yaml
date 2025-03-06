@@ -32,6 +32,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .secretKeyRef.key }}
+                  name: {{ .secretKeyRef.name }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
