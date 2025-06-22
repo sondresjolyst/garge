@@ -17,6 +17,10 @@ podSecurityContext: {}
 
 securityContext: {}
 
+service:
+  type: ClusterIP
+  port: 5000
+
 resources: {}
 
 nodeSelector: {}
