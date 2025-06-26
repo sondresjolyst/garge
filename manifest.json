@@ -1,5 +1,7 @@
-{
-  "name": "garge_test",
-  "version": "v0.0.2",
-  "bin_url": "https://sondresjolyst.github.io/garge/firmware/garge-sensor-bme-v0.0.2.bin"
-}
+[
+    {
+        "name": "garge_sensor_bme",
+        "version": "v0.0.2",
+        "bin_url": "https://sondresjolyst.github.io/garge/firmware/garge_sensor_bme_v0.0.2.bin"
+    }
+]
