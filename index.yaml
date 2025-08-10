@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   garge-api:
   - apiVersion: v2
+    created: "2025-08-10T16:49:54.229692437Z"
+    description: A Helm chart for Kubernetes
+    digest: 02da0c6972dcfc07522842e649ffbb58b50c6c179322406447da18dd24311ac4
+    name: garge-api
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.5/garge-api-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
     created: "2025-06-27T13:45:22.649673428Z"
     description: A Helm chart for Kubernetes
     digest: f9cc327a9bb69ac12dfb5f50360de84a78dce15921d64b3d90eb538f3c4f0277
@@ -47,6 +56,15 @@ entries:
     - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.0/garge-api-0.1.0.tgz
     version: 0.1.0
   garge-app:
+  - apiVersion: v2
+    created: "2025-08-10T16:49:54.421325016Z"
+    description: A Helm chart for Kubernetes
+    digest: cbdefebb8e2695dcd3670ead8b89fae63fdac1a6740b6b25dad698926b3925b5
+    name: garge-app
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-app-0.1.6/garge-app-0.1.6.tgz
+    version: 0.1.6
   - apiVersion: v2
     created: "2025-07-21T16:17:46.004304453Z"
     description: A Helm chart for Kubernetes
@@ -102,6 +120,15 @@ entries:
     - https://github.com/sondresjolyst/garge/releases/download/garge-app-0.1.0/garge-app-0.1.0.tgz
     version: 0.1.0
   garge-operator:
+  - apiVersion: v2
+    created: "2025-08-10T16:49:54.610077509Z"
+    description: A Helm chart for Kubernetes
+    digest: 7296145d7eceafcbcee301aeecf2c789af807a4ce9efb5b881f686475ae3f943
+    name: garge-operator
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.8/garge-operator-0.1.8.tgz
+    version: 0.1.8
   - apiVersion: v2
     created: "2025-06-27T13:45:22.985550814Z"
     description: A Helm chart for Kubernetes
@@ -174,4 +201,4 @@ entries:
     urls:
     - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.0/garge-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-21T16:17:46.004351091Z"
+generated: "2025-08-10T16:49:54.610156636Z"
