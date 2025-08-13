@@ -1,11 +1,6 @@
 [
     {
         "name": "garge_sensor_bme",
-        "version": "v0.0.2",
-        "bin_url": "https://sondresjolyst.github.io/garge/firmware/firmware_garge_sensor_bme_v0.0.2.bin"
-    },
-    {
-        "name": "garge_sensor_bme",
         "version": "v1.2.0",
         "bin_url": "https://sondresjolyst.github.io/garge/firmware/firmware_garge_sensor_bme_v1.2.0.bin"
     },
@@ -13,5 +8,15 @@
         "name": "garge_voltmeter_bme",
         "version": "v1.2.0",
         "bin_url": "https://sondresjolyst.github.io/garge/firmware/firmware_garge_voltmeter_bme_v1.2.0.bin"
+    },
+    {
+        "name": "garge_sensor_bme",
+        "version": "v1.3.0",
+        "bin_url": "https://sondresjolyst.github.io/garge/firmware/firmware_garge_sensor_bme_v1.3.0.bin"
+    },
+    {
+        "name": "garge_voltmeter_bme",
+        "version": "v1.3.0",
+        "bin_url": "https://sondresjolyst.github.io/garge/firmware/firmware_garge_voltmeter_bme_v1.3.0.bin"
     }
 ]
