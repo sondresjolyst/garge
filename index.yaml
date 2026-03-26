@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   garge-api:
   - apiVersion: v2
+    created: "2026-03-26T20:10:10.75150186Z"
+    description: A Helm chart for Kubernetes
+    digest: 142e6a765153bdf7287719aec5ce18ab4a2744a68b5d6d99dcf06a03a77f846f
+    name: garge-api
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.8/garge-api-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
     created: "2025-08-12T17:12:19.147978398Z"
     description: A Helm chart for Kubernetes
     digest: af6ab1dc47a969c32c0966ab906f878330af5b14098d915f93a5cea91158258f
@@ -65,6 +74,15 @@ entries:
     - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.0/garge-api-0.1.0.tgz
     version: 0.1.0
   garge-app:
+  - apiVersion: v2
+    created: "2026-03-26T20:10:10.871395884Z"
+    description: A Helm chart for Kubernetes
+    digest: 4e01c326fe42de8d38d8784caef2c6d249a963a6ef9aef7ac0321c05bbed9a8b
+    name: garge-app
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-app-0.1.9/garge-app-0.1.9.tgz
+    version: 0.1.9
   - apiVersion: v2
     created: "2025-12-20T20:07:52.823015093Z"
     description: A Helm chart for Kubernetes
@@ -148,6 +166,15 @@ entries:
     version: 0.1.0
   garge-operator:
   - apiVersion: v2
+    created: "2026-03-26T20:10:11.018025844Z"
+    description: A Helm chart for Kubernetes
+    digest: e8c7ef1c8a742f6b7818b2307c617e09988ea4c13fdcedb1ad61b42a7481fa46
+    name: garge-operator
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.9/garge-operator-0.1.9.tgz
+    version: 0.1.9
+  - apiVersion: v2
     created: "2025-08-10T16:49:54.610077509Z"
     description: A Helm chart for Kubernetes
     digest: 7296145d7eceafcbcee301aeecf2c789af807a4ce9efb5b881f686475ae3f943
@@ -228,4 +255,4 @@ entries:
     urls:
     - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.0/garge-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-20T20:07:52.823089122Z"
+generated: "2026-03-26T20:10:11.01812484Z"
