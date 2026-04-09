@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   garge-api:
   - apiVersion: v2
+    created: "2026-04-09T05:05:51.774701765Z"
+    description: A Helm chart for Kubernetes
+    digest: edbefe10e996fc0321108ab60abcde006cda61bb2defb0374e7357056b2d5d6e
+    name: garge-api
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.13/garge-api-0.1.13.tgz
+    version: 0.1.13
+  - apiVersion: v2
     created: "2026-04-08T15:35:42.982360071Z"
     description: A Helm chart for Kubernetes
     digest: b195c690f9dd8fc569a887456b5f27936cc72f27f608817fa2d96698ccdeb453
@@ -110,6 +119,15 @@ entries:
     - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.0/garge-api-0.1.0.tgz
     version: 0.1.0
   garge-app:
+  - apiVersion: v2
+    created: "2026-04-09T05:05:51.944494879Z"
+    description: A Helm chart for Kubernetes
+    digest: 1f5ebe9dca54825ef101cdbb603c0686378423479473f868f7f8ec7510f306e5
+    name: garge-app
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-app-0.1.13/garge-app-0.1.13.tgz
+    version: 0.1.13
   - apiVersion: v2
     created: "2026-04-08T15:35:43.234948156Z"
     description: A Helm chart for Kubernetes
@@ -229,6 +247,15 @@ entries:
     version: 0.1.0
   garge-operator:
   - apiVersion: v2
+    created: "2026-04-09T05:05:52.055830889Z"
+    description: A Helm chart for Kubernetes
+    digest: b61017eeb43e481c752600814422d88897bb5bf29010171204eb4375cfbeef88
+    name: garge-operator
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.13/garge-operator-0.1.13.tgz
+    version: 0.1.13
+  - apiVersion: v2
     created: "2026-04-08T15:35:43.453422048Z"
     description: A Helm chart for Kubernetes
     digest: 1fc563579a8df800cbb6f5b3b75d99218039f8101db17151ae2ed90701117d24
@@ -345,4 +372,4 @@ entries:
     urls:
     - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.0/garge-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-08T15:35:43.453706579Z"
+generated: "2026-04-09T05:05:52.05608851Z"
