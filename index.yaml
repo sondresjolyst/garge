@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   garge-api:
   - apiVersion: v2
+    created: "2026-04-19T15:59:39.193491564Z"
+    description: A Helm chart for Kubernetes
+    digest: 3f99366a0b16ff0e2e7b7b1d700dae2aeb5971bbc27663711d74d319b1b3fdc0
+    name: garge-api
+    type: application
+    urls:
+    - https://github.com/sondresjolyst/garge/releases/download/garge-api-0.1.20/garge-api-0.1.20.tgz
+    version: 0.1.20
+  - apiVersion: v2
     created: "2026-04-18T20:40:19.741358097Z"
     description: A Helm chart for Kubernetes
     digest: 35d4b5b9511cafb38752e2245ba49f5903d53034d5fd8a48c375d7b0075849da
@@ -507,4 +516,4 @@ entries:
     urls:
     - https://github.com/sondresjolyst/garge/releases/download/garge-operator-0.1.0/garge-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-18T20:40:19.983699815Z"
+generated: "2026-04-19T15:59:39.193701371Z"
