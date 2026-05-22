@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | **Prepared** | 2026-05-20 |
-| **Revised** | 2026-05-21 — (a) Activity A retention changed from a fixed 6-month cap to claim-lifetime retention under legitimate interest with an Art. 21 opt-out; (b) citations aligned to current published guidance (EDPB Guidelines 1/2024, Pseudonymisation 01/2025) and the CJEU *SRB* identifiability test; (c) finalized with controller decisions (§ Decisions), controller identity, and the updated backup policy; (d) completed the motivated-intruder test (Appendix A) + regulatory conformity check (Appendix B) |
+| **Revised** | 2026-05-21 — (a) Activity A retention changed from a fixed 6-month cap to claim-lifetime retention under legitimate interest with an Art. 21 opt-out; (b) citations aligned to current published guidance (EDPB Guidelines 1/2024, Pseudonymisation 01/2025) and the CJEU *SRB* identifiability test; (c) finalized with controller decisions (§ Decisions), controller identity, and the updated backup policy; (d) completed the motivated-intruder test (Appendix A) + regulatory conformity check (Appendix B). 2026-05-22 — editorial: removed dev-maintenance and optional-hardening notes; corrected a DPO reference to the controller |
 | **Prepared by** | Engineering (Garge platform) |
 | **Status** | Controller-approved |
 | **Next review** | 2027-05-20, or on any change to the retention/anonymization design, or on relevant new regulatory guidance |
@@ -47,7 +47,7 @@ Restoring a user's history is not possible without retaining the rows; deleting 
 - **Impact on the individual:** minimal — the data is not used against them; it sits dormant pending possible restore, and the data subject controls it.
 - **Safeguards (decisive):** retention is **bounded to the lifetime of the claim** (unclaim/sale/account-deletion all end it and trigger anonymization); the user has an **opt-out / right to object** (Art. 21) that, once exercised, makes their suspended data eligible for a **6-month-then-anonymize** purge after coverage lapses; the user can **export or delete** the data at any time. The combination of *claim-bounded retention + opt-out + export/delete* is what makes the balance pass and is **load-bearing** — an unbounded retention with no opt-out and no claim boundary would NOT pass.
 
-**Conclusion (A):** Legitimate interest is an appropriate basis **provided** the opt-out, the claim-boundary anonymization, and the export/delete affordances are genuinely in place (they are — see §5). Because retention now defaults to the lifetime of the claim rather than a short cap, the **balancing rests on the opt-out and the claim boundary**, which the DPO should weigh explicitly (see §6).
+**Conclusion (A):** Legitimate interest is an appropriate basis **provided** the opt-out, the claim-boundary anonymization, and the export/delete affordances are genuinely in place (they are — see §5). Because retention now defaults to the lifetime of the claim rather than a short cap, the **balancing rests on the opt-out and the claim boundary**, which the controller has weighed explicitly (see §6).
 
 ---
 
@@ -121,8 +121,6 @@ If the motivated-intruder test had failed (or future regulatory guidance raises 
 1. ✅ **Motivated-intruder test** — completed and documented in **Appendix A**. Conclusion: re-identification not reasonably likely for any external recipient (anonymous on release); for the controller, a time-bounded residual exists only via exact timestamp+value correlation against backups, which expires when backups rotate (≤6 months). Overall residual risk **low**; per-device keep-forever is defensible given backup access controls + the ≤6-month horizon. Aggregate-at-cap remains the documented fallback.
 2. ✅ **Regulatory conformity check** — completed in **Appendix B**: legitimate interest mapped to **EDPB Guidelines 1/2024**; identifiability assessed under the CJEU *SRB* relative test; design checked against **EDPB Guidelines 01/2025 on Pseudonymisation**.
 
-**Optional hardening (controller may elect):** coarsen/jitter the retained timestamps in the anonymized store to remove even the time-bounded controller-side correlation vector in Appendix A. Not required for the current conclusion.
-
 ## 7. Sign-off
 
 | Role | Name | Date |
@@ -159,7 +157,6 @@ Re-review on any change to the retention/anonymization design, on relevant new r
 - **Relative to any external party:** the data is **anonymous on release** (no means reasonably likely to re-identify).
 - **Relative to the controller:** **strongly pseudonymised for ≤6 months** (the backup timestamp-correlation vector), becoming **anonymous once backups rotate**. The data is not used during that window; the vector is gated by encryption + RBAC.
 - **Overall residual risk: LOW.** Per-device, keep-forever retention is **defensible** provided (i) backup access controls hold and (ii) the ≤6-month backup horizon is maintained — both currently true.
-- **Optional hardening:** rounding/jittering retained timestamps would remove even the controller-side ≤6-month vector (would make the store anonymous to the controller immediately). Not required for this conclusion.
 
 ## Appendix B — Regulatory conformity check (guidance available May 2026)
 

@@ -1,6 +1,6 @@
 # Data Protection Impact Assessment — Sensor Data
 
-**Last updated:** 2026-05-21
+**Last updated:** 2026-05-22
 **DPIA version:** v2
 **Reviewed by:** Sondre Sjølyst (controller)
 **Applies to:** Continuous collection and storage of vehicle/garage sensor readings (battery voltage, temperature, humidity, switch states) tied to customer accounts.
@@ -85,7 +85,7 @@ Garge processes sensor readings continuously, ties them to identifiable customer
 | R1 | Per-customer access only; no analytics shared with third parties; successful-path sensor reading values are scrubbed from log lines (only sensor/switch IDs are logged for diagnostics). Rare bad-request and parse-failure warnings retain the literal value for debugging. Older log lines in Loki retention (≤90 days) may still contain reading values until rotation completes |
 | R2 | Billing address only displayed to the customer themselves and on their own invoice; not exposed to other Garge users |
 | R3 | Soft-delete severs the customer link; sensor + reading rows remain but contain no name/email/phone |
-| R4 | Write endpoints (`CreateSensorData*`, `UpdateSensor`, `DeleteSensor*`) require `Admin` or `SensorAdmin` role; same for switch endpoints with `SwitchAdmin`. Verified in `Controllers/SensorController.cs` |
+| R4 | Write endpoints (sensor and switch data/config) require `Admin`, `SensorAdmin`, or `SwitchAdmin` roles; enforced in the API authorization layer |
 | R5 | Backups encrypted at rest; rotation (3 daily / 4 weekly / 6 monthly, no yearly) deletes residual data within ~6 months of any soft-delete; access RBAC-restricted |
 | R7 | Surrogate key with no stored reverse map; independent series (never cross-linked); regenerable battery data dropped; logs (90d) + backups (≤6mo) within the mapping horizon. **Motivated-intruder test completed** (LIA Appendix A): anonymous to external parties on release; controller-side residual only via exact timestamp+value backup correlation, expiring with the ≤6mo backup rotation — residual risk **low**. Re-reviewed if regulatory guidance changes; documented fallback = aggregate-at-cap. Full analysis: `legitimate-interest-assessment.md` §3 + Appendices A/B |
 | R6 | Privacy notice (`/privacy`) explicitly discloses continuous monitoring and what is recorded |
@@ -98,13 +98,13 @@ The behaviour-inference risk (R1) is intrinsic to the service: customers receive
 
 ## 7. Decision
 
-Processing **proceeds** under the controls above. DPIA reviewed annually or on any of the following triggers:
+Processing **proceeds** under the controls above. This DPIA is reviewed at least annually, and re-assessed on any of the following triggers:
 
-- New sensor type collected (e.g., GPS, image)
-- Sharing readings with a third party
-- New automation rule that affects safety-critical equipment
-- Customer-base expansion to a high-risk segment (children, vulnerable adults)
-- Any reportable breach involving sensor data
+- A new, more sensitive telemetry type — in particular **location/GPS** or **camera/image** data.
+- Sharing telemetry with a third party (e.g., an insurer or analytics partner).
+- A change to the anonymization or retention model that weakens the ML store's anonymity basis (e.g., storing a series-to-device map, or extending the backup/log horizon).
+- A new category of data subject beyond the account owner (e.g., shared or fleet access that exposes another person's usage patterns).
+- Any reportable personal-data or sensor-data breach.
 
 ## 8. Sign-off
 
@@ -118,5 +118,4 @@ Processing **proceeds** for v2; the anonymized ML store's "anonymous" basis is s
 ## 9. Document maintenance
 
 - Stored in the `garge` umbrella repo at `docs/compliance/dpia-sensor-data.md`.
-- Update in the same change-set as any sensor-processing change in `garge-api`/`garge-app` (see the PR checklist / `docs/compliance/README.md`).
-- Reviewed at least annually.
+- Reviewed at least annually and whenever the sensor processing materially changes (see the §7 triggers).

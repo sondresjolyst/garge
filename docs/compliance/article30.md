@@ -1,6 +1,6 @@
 # Records of Processing Activities (GDPR Article 30)
 
-**Last updated:** 2026-05-21
+**Last updated:** 2026-05-22
 **Document version:** v2
 **Maintained in the `garge` umbrella repo; describes processing across the `garge-api`, `garge-app` and `garge-operator` services.**
 
@@ -16,8 +16,6 @@
 | Address | Mårvegen 21a, 4347 Lye, Norway |
 | General contact | sondresjoelyst@gmail.com |
 | Privacy contact | sondresjoelyst@gmail.com |
-
-(Contact emails are sourced from `garge-app: src/lib/company.ts`. Update both there and here together.)
 
 No joint controllers. No DPO designated (not required — no special-category processing, no large-scale public-area monitoring, fewer than 250 employees).
 
@@ -146,7 +144,7 @@ The Garge platform is **self-hosted** by Sjølyst Innovations on infrastructure 
 ## 5. Data subject rights — implementations
 
 - **Access (Art. 15) + Portability (Art. 20):** `GET /api/users/{id}/export` returns JSON with all customer data (account, sensors, switches, readings, activities, photos).
-- **Rectification (Art. 16):** `PUT /api/users/{id}/profile` (name + phone) and `PUT /api/users/{id}/preferences` (settings). Email change requires re-verification (planned follow-up).
+- **Rectification (Art. 16):** name and phone via `PUT /api/users/{id}/profile`, preferences via `PUT /api/users/{id}/preferences`; email changes are made by the controller on request.
 - **Erasure (Art. 17):** `DELETE /api/users/{id}/account` — soft-deletes the user (PII scrubbed, account locked), retains Orders and Invoices for the 5-year Norwegian Bookkeeping Act obligation, deletes RefreshTokens / PushSubscriptions / WebhookSubscriptions / custom names / activities.
 - **Restriction / Object (Art. 18, 21):** No automated decision-making. No direct-marketing processing. Users can **object to legitimate-interest retention** of a suspended device's history via the data-retention opt-out (`PUT /api/users/{id}/data-retention`; profile toggle) — once set and the subscription has lapsed, the suspended device's data is purged after 6 months. Users can also soft-delete to stop processing.
 - **Withdraw consent (Art. 7(3)):** Push permissions: revoke in browser settings. Subscription waiver of right of withdrawal: cannot be retroactively withdrawn (the Norwegian Right of Withdrawal Act (angrerettloven §22 letter n), by design).
@@ -160,5 +158,4 @@ The Garge platform is **self-hosted** by Sjølyst Innovations on infrastructure 
 ## 7. Document maintenance
 
 - Stored in the `garge` umbrella repo at `docs/compliance/article30.md`.
-- Update in the same change-set as any data-processing change in a service repo (new processor, new collected field, changed retention, etc.) — see the PR checklist / `docs/compliance/README.md`.
-- Reviewed at least annually.
+- Reviewed at least annually and whenever a processing activity materially changes (new processor, collected field, or retention).
