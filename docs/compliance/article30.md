@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-05-22
 **Document version:** v2
-**Describes processing across all Garge services (API, web app, device operator, and MQTT broker).**
+**Describes processing across the whole Garge platform.**
 
 > **v2 (2026-05-21):** sensor/switch retention moved from contract-only to claim-lifetime under legitimate interest with an Art. 21 opt-out; added the **anonymized telemetry (ML)** activity (§3.8); updated backup retention (§3.7); recorded the retention opt-out under data-subject rights (§5). See DPIA `dpia-sensor-data.md` and LIA `legitimate-interest-assessment.md` (same folder).
 

@@ -1,6 +1,6 @@
 # Garge — Compliance & governance docs
 
-Controller/org-level data-protection documents for the Garge platform. They describe processing that spans **all** Garge services (the API, web app, device operator, and MQTT broker), so they are maintained centrally rather than alongside any single service.
+Controller/org-level data-protection documents for the Garge platform. They describe processing that spans the **whole** Garge platform, so they are maintained centrally rather than alongside any single service.
 
 | Document | Purpose |
 |---|---|
@@ -12,6 +12,6 @@ Controller/org-level data-protection documents for the Garge platform. They desc
 
 ## What lives where
 - **These governance records** are the single source of truth for how Garge processes personal data.
-- **User-facing legal notices** (privacy policy, terms, cookie policy) are published in the Garge web app at `/privacy`, `/terms`, and `/cookies`.
+- **User-facing legal notices** (privacy policy, terms, cookie policy) are published in the Garge app at `/privacy`, `/terms`, and `/cookies`.
 
 Each record states its own review cadence and re-assessment triggers in its maintenance/decision section.
