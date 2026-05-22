@@ -1,6 +1,6 @@
 # Garge — Compliance & governance docs
 
-Controller/org-level data-protection documents for the Garge platform. They describe processing that spans **all** services (`garge-api`, `garge-app`, `garge-operator`, the MQTT broker), so they live here in the umbrella repo rather than in any single service repo.
+Controller/org-level data-protection documents for the Garge platform. They describe processing that spans **all** Garge services (the API, web app, device operator, and MQTT broker), so they are maintained centrally rather than alongside any single service.
 
 | Document | Purpose |
 |---|---|
@@ -11,14 +11,7 @@ Controller/org-level data-protection documents for the Garge platform. They desc
 **Controller:** Sjølyst Innovations (trading as Garge), org. 934 531 035. No DPO designated (not required). Supervisory authority: Datatilsynet (Norway).
 
 ## What lives where
-- **These governance docs** → here (`garge/docs/compliance/`). Single source of truth.
-- **User-facing legal pages** (privacy policy, terms, cookie policy) → `garge-app` (`src/app/privacy`, `/terms`, `/cookies`) — they are rendered pages, not documents.
-- **Implementation** referenced by these docs → the service repos (`garge-api` backend, `garge-app` frontend, `garge-operator`).
+- **These governance records** are the single source of truth for how Garge processes personal data.
+- **User-facing legal notices** (privacy policy, terms, cookie policy) are published in the Garge web app at `/privacy`, `/terms`, and `/cookies`.
 
-## Keeping these in sync with code (PR checklist)
-Because the docs no longer sit next to the code, when a change in **any** service repo alters data processing, update the relevant doc here in the same change-set:
-
-- [ ] New/changed **collected field**, **data category**, or **recipient/sub-processor** → update `article30.md`.
-- [ ] New **lawful basis**, **retention rule**, or **purpose** → update `article30.md` + `dpia-sensor-data.md` (+ `legitimate-interest-assessment.md` if it touches legitimate interest or anonymisation).
-- [ ] New **sensor type**, third-party sharing, or safety-critical automation → re-open the DPIA (see its §7 triggers).
-- [ ] Bump the document version + `Last updated` + sign-off date on any substantive change.
+Each record states its own review cadence and re-assessment triggers in its maintenance/decision section.

@@ -4,7 +4,7 @@
 **DPIA version:** v2
 **Reviewed by:** Sondre Sjølyst (controller)
 **Applies to:** Continuous collection and storage of vehicle/garage sensor readings (battery voltage, temperature, humidity, switch states) tied to customer accounts.
-**v2 change (2026-05-21):** triggered by the over-quota suspension + data-retention work — adds a new lawful basis for retention beyond contract (Art. 6(1)(f) legitimate interest with an Art. 21 opt-out), keeps a returning owner's history for the lifetime of the claim, and adds an **anonymized telemetry store** kept indefinitely for ML. Detailed legitimate-interest + re-identification analysis: see `legitimate-interest-assessment.md` (LIA, same folder). Processing inventory: `article30.md`.
+**v2 change (2026-05-21):** triggered by introducing over-quota device suspension and the data-retention opt-out — adds a new lawful basis for retention beyond contract (Art. 6(1)(f) legitimate interest with an Art. 21 opt-out), keeps a returning owner's history for the lifetime of the claim, and adds an **anonymized telemetry store** kept indefinitely for ML. Detailed legitimate-interest + re-identification analysis: see `legitimate-interest-assessment.md` (LIA, same folder). Processing inventory: `article30.md`.
 
 ## 1. Necessity of the DPIA
 
@@ -44,20 +44,20 @@ Garge processes sensor readings continuously, ties them to identifiable customer
 
 ### R2 — Location inference
 
-**Risk:** The billing address (Subscription.BillingAddress) plus sensor activity reveals the customer's garage location and presence patterns there.
+**Risk:** The billing address plus sensor activity reveals the customer's garage location and presence patterns there.
 **Likelihood:** Medium.
 **Severity:** Medium-High.
 
 ### R3 — Re-identification of "anonymized" sensor data after account soft-delete
 
-**Risk:** After soft-delete, UserSensors rows are cleared, but the historical readings remain. If an attacker has *external* knowledge (which sensor name belonged to which customer), they could re-identify.
+**Risk:** After soft-delete, the customer-to-device links are cleared, but the historical readings remain. If an attacker has *external* knowledge (which sensor name belonged to which customer), they could re-identify.
 **Likelihood:** Low.
 **Severity:** Medium.
 
 ### R4 — Sensor-data write authorization bypass
 
 **Risk:** A user with write access to a sensor could inject false readings to mislead automation rules of others.
-**Likelihood:** Low (gated by SensorAdmin role after security audit).
+**Likelihood:** Low (gated by the SensorAdmin role).
 **Severity:** Medium.
 
 ### R5 — Backup leakage
@@ -117,5 +117,5 @@ Processing **proceeds** for v2; the anonymized ML store's "anonymous" basis is s
 
 ## 9. Document maintenance
 
-- Stored in the `garge` umbrella repo at `docs/compliance/dpia-sensor-data.md`.
+- Maintained under version control by the controller.
 - Reviewed at least annually and whenever the sensor processing materially changes (see the §7 triggers).

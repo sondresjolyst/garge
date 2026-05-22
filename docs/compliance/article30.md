@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-05-22
 **Document version:** v2
-**Maintained in the `garge` umbrella repo; describes processing across the `garge-api`, `garge-app` and `garge-operator` services.**
+**Describes processing across all Garge services (API, web app, device operator, and MQTT broker).**
 
 > **v2 (2026-05-21):** sensor/switch retention moved from contract-only to claim-lifetime under legitimate interest with an Art. 21 opt-out; added the **anonymized telemetry (ML)** activity (§3.8); updated backup retention (§3.7); recorded the retention opt-out under data-subject rights (§5). See DPIA `dpia-sensor-data.md` and LIA `legitimate-interest-assessment.md` (same folder).
 
@@ -143,10 +143,10 @@ The Garge platform is **self-hosted** by Sjølyst Innovations on infrastructure 
 
 ## 5. Data subject rights — implementations
 
-- **Access (Art. 15) + Portability (Art. 20):** `GET /api/users/{id}/export` returns JSON with all customer data (account, sensors, switches, readings, activities, photos).
-- **Rectification (Art. 16):** name and phone via `PUT /api/users/{id}/profile`, preferences via `PUT /api/users/{id}/preferences`; email changes are made by the controller on request.
-- **Erasure (Art. 17):** `DELETE /api/users/{id}/account` — soft-deletes the user (PII scrubbed, account locked), retains Orders and Invoices for the 5-year Norwegian Bookkeeping Act obligation, deletes RefreshTokens / PushSubscriptions / WebhookSubscriptions / custom names / activities.
-- **Restriction / Object (Art. 18, 21):** No automated decision-making. No direct-marketing processing. Users can **object to legitimate-interest retention** of a suspended device's history via the data-retention opt-out (`PUT /api/users/{id}/data-retention`; profile toggle) — once set and the subscription has lapsed, the suspended device's data is purged after 6 months. Users can also soft-delete to stop processing.
+- **Access (Art. 15) + Portability (Art. 20):** a self-service export returns all of the customer's data (account, sensors, switches, readings, activities, photos) in a structured JSON file.
+- **Rectification (Art. 16):** the customer can edit their name, phone, and preferences from their profile; email changes are made by the controller on request.
+- **Erasure (Art. 17):** the customer can delete their account (a soft-delete) — personal data is scrubbed and the account locked, while orders and invoices are retained for the 5-year Norwegian Bookkeeping Act obligation; refresh tokens, push subscriptions, webhook subscriptions, custom names, and activities are deleted.
+- **Restriction / Object (Art. 18, 21):** No automated decision-making. No direct-marketing processing. The customer can **object to legitimate-interest retention** of a suspended device's history via the data-retention opt-out (a profile toggle) — once set and the subscription has lapsed, the suspended device's data is purged after 6 months. The customer can also delete their account to stop processing.
 - **Withdraw consent (Art. 7(3)):** Push permissions: revoke in browser settings. Subscription waiver of right of withdrawal: cannot be retroactively withdrawn (the Norwegian Right of Withdrawal Act (angrerettloven §22 letter n), by design).
 
 ## 6. Breach response
@@ -157,5 +157,5 @@ The Garge platform is **self-hosted** by Sjølyst Innovations on infrastructure 
 
 ## 7. Document maintenance
 
-- Stored in the `garge` umbrella repo at `docs/compliance/article30.md`.
+- Maintained under version control by the controller.
 - Reviewed at least annually and whenever a processing activity materially changes (new processor, collected field, or retention).

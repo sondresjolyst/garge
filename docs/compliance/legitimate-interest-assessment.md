@@ -12,7 +12,7 @@
 | **Status** | Controller-approved |
 | **Next review** | 2027-05-20, or on any change to the retention/anonymization design, or on relevant new regulatory guidance |
 | **Controller** | Sjølyst Innovations (trading as Garge), org. 934 531 035, Mårvegen 21a, 4347 Lye, Norway. Privacy contact: sondresjoelyst@gmail.com. No DPO designated (not required — see Art. 30 §1). Self-hosted; no upstream cloud processor for telemetry. |
-| **Related docs** | DPIA `dpia-sensor-data.md`; Records of Processing `article30.md` (same folder). Implementation lives in the `garge-api` (backend) and `garge-app` (frontend) repos. |
+| **Related docs** | DPIA `dpia-sensor-data.md`; Records of Processing `article30.md` (same folder). |
 
 ### Decisions (controller, 2026-05-21)
 - **Activity B anonymisation:** keep **per-device series, indefinitely** (max ML utility). This makes the §3.5 motivated-intruder test and the post-*SRB* guidance re-check **required pre-launch conditions**, not optional.
@@ -29,7 +29,7 @@ Two processing activities are assessed:
 - **A — Suspended-sensor retention.** When a user cancels/downgrades and owns more sensors than their plan covers, access to the excess sensors is suspended, but their telemetry continues to be collected and stored. By **default it is kept for the lifetime of the claim** (for as long as the user still owns the sensor), so a returning subscriber — e.g. a seasonal motorcyclist who cancels each summer — regains their full year-over-year history. The user may **object at any time** via a data-retention opt-out (Art. 21); once a user has opted out *and* no longer has any subscription coverage, the data is purged after a **6-month** grace.
 - **B — Anonymization for ML.** On the opt-out purge, on GDPR erasure, and on account deletion, the relevant telemetry is moved into an **anonymized store** with no link back to the user or device, and retained indefinitely for analytics / model development (e.g. battery-health algorithms).
 
-**Data categories:** environmental/device telemetry — temperature, humidity, battery voltage, switch on/off state — with timestamps. Low sensitivity: no special-category data (Art. 9), no location, no direct profiling of individuals. Personal only by virtue of being linked to a user via the `UserSensor` / `SensorOwnershipPeriod` mapping (the raw `SensorData`/`SwitchData` rows contain no user identifier).
+**Data categories:** environmental/device telemetry — temperature, humidity, battery voltage, switch on/off state — with timestamps. Low sensitivity: no special-category data (Art. 9), no location, no direct profiling of individuals. Personal only by virtue of the stored link between a user and their device; the raw reading rows themselves contain no user identifier.
 
 ---
 
@@ -56,16 +56,16 @@ Restoring a user's history is not possible without retaining the rows; deleting 
 Claim: at the cap (or on erasure), telemetry is rendered **anonymous** (Recital 26) and falls outside GDPR, so it may be retained indefinitely for ML. This holds **only if** re-identification is not reasonably likely by any means available to the controller or a third party. Assessed against the three WP29 risks:
 
 ### 3.1 Singling out
-A per-device time series can in principle fingerprint a household (usage patterns). Mitigations: series are stored under a **fresh surrogate key with no stored mapping** to the original `SensorId`; series are **kept independent** (never cross-linked by site/gateway/`ParentName`), preventing multi-sensor household fingerprints. **Residual risk: low** for this low-sensitivity data, but **non-zero** because absolute timestamps are retained (a deliberate utility choice). → see Residual Risk & required controls.
+A per-device time series can in principle fingerprint a household (usage patterns). Mitigations: series are stored under a **fresh surrogate key with no stored mapping** to the original device; series are **kept independent** (never cross-linked by site or gateway), preventing multi-sensor household fingerprints. **Residual risk: low** for this low-sensitivity data, but **non-zero** because absolute timestamps are retained (a deliberate utility choice). → see Residual Risk & required controls.
 
 ### 3.2 Linkability
-The link to a person is severed by deleting/orphaning every vector that ties `SensorId`/`SwitchId` to a user: the `UserSensor`/`SensorOwnershipPeriod` rows, custom names, sensor activities (notes/odometer), photos, offline-notification rows, and (for re-claim) by assigning a **fresh device identity** so the same physical device cannot rejoin the anonymized data. **No `SeriesId → SensorId` map is stored.**
+The link to a person is severed by deleting every vector that ties a device to a user: the user-to-device link and ownership-window records, custom names, sensor activities (notes/odometer), photos, and offline-notification records; and, on re-claim, by assigning a **fresh device identity** so the same physical device cannot rejoin the anonymized data. **No series-to-device map is stored.**
 
 ### 3.3 Inference
 No profiling or inference about individuals is performed on the anonymized set; it is used for aggregate model development.
 
 ### 3.4 Out-of-database vectors (must be controlled — see §5)
-- **Application logs** pair `CallerUserId + SensorId + RegistrationCode` (claim/unclaim). These reconstruct the mapping if retained past the analytics horizon → **log retention must be ≤ 6 months** (current policy: 90 days — compliant).
+- **Application logs** record the user, device, and registration code on claim/unclaim. These could reconstruct the mapping if retained past the analytics horizon → **log retention must be ≤ 6 months** (current policy: 90 days — compliant).
 - **Database backups** taken before anonymization still contain the mapping → backup retention must be bounded. Backup policy is **3 daily / 4 weekly / 6 monthly (no yearly)** → maximum residual age ≈ **6 months**, which sits within the mapping horizon. **Resolved** (the earlier 12-month yearly-snapshot concern no longer applies); a disaster restore re-applies the anonymization sweeps on next run.
 
 ### 3.5 Residual risk & required controls
@@ -97,13 +97,13 @@ If the motivated-intruder test had failed (or future regulatory guidance raises 
 
 ## 5. Safeguards & technical measures (implemented)
 
-- **Right to object (opt-out)** — `User.DataRetentionOptOutAt` set/cleared via `GET`/`PUT /api/users/{id}/data-retention`; surfaced as a profile toggle and at cancel/downgrade. This is the Art. 21 control the balancing test relies on.
-- **Opt-out cap purge** — `SuspendedSensorPurgeService` (daily) force-unclaims and anonymizes sensors suspended > 180 days **only** for owners who have opted out **and** have no subscription coverage. Default (not opted out) sensors are kept for the lifetime of the claim.
-- **Claim-boundary anonymization** — unclaim/sale (`SensorOwnershipPeriod` close) and account deletion move the user's exclusive telemetry into the anonymized store, so personal data does not outlive the claim.
-- **Anonymization routine** — `AnonymizationService`: surrogate-keyed series, no reverse map, exclusive-window only (co-owners preserved), regenerable battery data dropped.
-- **Resale/ownership window** — `SensorOwnershipPeriod` / `SwitchOwnershipPeriod` bound reads to the caller's ownership window; a new owner cannot see a previous owner's history.
-- **Data-subject rights decoupled from suspension** — export (`ExportData`) and unclaim/delete are **never** gated by the suspension 403; suspended data remains exportable and erasable.
-- **Erasure** — account deletion anonymizes the user's exclusive telemetry and removes all per-user rows (incl. photos; orphan bug fixed).
+- **Right to object (opt-out)** — a data-retention opt-out the user can set or clear, surfaced as a profile toggle and at cancel/downgrade. This is the Art. 21 control the balancing test relies on.
+- **Opt-out cap purge** — a daily job force-unclaims and anonymizes sensors suspended more than 180 days **only** for owners who have opted out **and** have no subscription coverage. Sensors of users who have not opted out are kept for the lifetime of the claim.
+- **Claim-boundary anonymization** — unclaim/sale (closing the ownership window) and account deletion move the user's exclusive telemetry into the anonymized store, so personal data does not outlive the claim.
+- **Anonymization routine** — surrogate-keyed series, no reverse map, exclusive-window only (co-owners preserved), regenerable battery data dropped.
+- **Resale/ownership window** — reads are bound to the caller's ownership window; a new owner cannot see a previous owner's history.
+- **Data-subject rights decoupled from suspension** — export and unclaim/delete are **never** gated by suspension; suspended data remains exportable and erasable.
+- **Erasure** — account deletion anonymizes the user's exclusive telemetry and removes all per-user rows, including photos.
 - **Transparency** — privacy policy retention clause + legal-basis section updated; just-in-time notice in cancel/downgrade flows.
 
 ## 6. Status of actions
@@ -133,19 +133,19 @@ Re-review on any change to the retention/anonymization design, on relevant new r
 
 ## Appendix A — Motivated-intruder test (anonymized ML store)
 
-**Prepared:** 2026-05-21 (engineering-prepared; controller-accepted — not legal advice). **Scope:** the `AnonymizedSeries` / `AnonymizedReading` store only (Activity B). **Method:** the WP29 "motivated intruder" concept (Opinion 05/2014), applied under the CJEU *SRB* **relative-identifiability** standard — identifiability is judged by the *means reasonably likely to be used* by the party holding the data, not in the absolute.
+**Prepared:** 2026-05-21 (engineering-prepared; controller-accepted — not legal advice). **Scope:** the anonymized ML store only (Activity B). **Method:** the WP29 "motivated intruder" concept (Opinion 05/2014), applied under the CJEU *SRB* **relative-identifiability** standard — identifiability is judged by the *means reasonably likely to be used* by the party holding the data, not in the absolute.
 
 ### A.1 What the store actually contains
-- `AnonymizedSeries`: surrogate `Id` (random, **no stored mapping** to `SensorId`/`SwitchId`/`UserId`), `SourceType` (voltage/temperature/humidity/socket), optional `CalibrationOffsetV`, `AnonymizedAt`.
-- `AnonymizedReading`: `Value` (double), `Timestamp` (absolute), FK to series.
-- **Not present:** any user/device/account id, name, location, billing address, `ParentName`/gateway, registration code. Series are **independent** (never cross-linked).
+- Each anonymized **series** carries a random surrogate identifier (with **no stored mapping** to any device or user), a source type (voltage/temperature/humidity/socket), an optional calibration offset, and the anonymization timestamp.
+- Each anonymized **reading** carries a numeric value, an absolute timestamp, and a reference to its series.
+- **Not present:** any user, device, or account identifier, name, location, billing address, gateway/site grouping, or registration code. Series are **independent** (never cross-linked).
 
 ### A.2 Intruder profiles & means reasonably likely
 | Intruder | Auxiliary data available | Can re-identify? |
 |---|---|---|
 | **External recipient / data leaked** | Only the de-identified series. No key, no device/location, independent series. | **No.** To link a value-time series to a person they would need to *already possess that same person's raw telemetry* (same sensor, same timestamps) — they don't, and there's no quasi-identifier (no location/postcode/DOB) to join on. Singling out a *record* is possible; identifying a *person* is not by means reasonably likely. |
 | **Controller insider (live DB)** | Live personal tables exist, but anonymization **deletes the source rows in the same transaction** and stores **no join key**. Post-anonymization there is nothing to join on except value+timestamp. | **Not in the live store.** Residual vector only via backups — see below. |
-| **Controller insider (backups)** | Backups taken *before* a given anonymization still contain the original `SensorData` with the same `Value`+`Timestamp`. An exact (value, timestamp) match could re-link a series to a `SensorId` → user. | **Time-bounded only.** Possible *during the backup horizon* (≤6 months: 3 daily/4 weekly/6 monthly, no yearly), then the matching source is gone permanently. Mitigated by backup encryption + RBAC; backups are restore-only, not processed. |
+| **Controller insider (backups)** | Backups taken *before* a given anonymization still contain the original readings with the same value and timestamp. An exact (value, timestamp) match could re-link a series to a device, and thus a user. | **Time-bounded only.** Possible *during the backup horizon* (≤6 months: 3 daily/4 weekly/6 monthly, no yearly), then the matching source is gone permanently. Mitigated by backup encryption + RBAC; backups are restore-only, not processed. |
 | **New owner of a resold device** | The live ownership-window already hides prior data; the anonymized store has no device id to query. | **No.** |
 
 ### A.3 WP29 three-risk check
@@ -167,7 +167,6 @@ Mapped to the guideline's three cumulative conditions:
 - **Legitimate interest pursued** — preserving the owner's own history (incl. year-over-year across seasonal gaps); real, present, specific (LIA §2.1). ✔
 - **Necessity** — restoring/comparing history is impossible without retaining the rows; proportionality preserved by binding to the ownership claim + opt-out, not a blanket cap (§2.2). ✔
 - **Balancing** — low-sensitivity data, reasonable expectations (disclosed in privacy policy + just-in-time notice), minimal impact, decisive safeguards: **Art. 21 opt-out**, claim-boundary anonymization, export/delete (§2.3). The guideline's emphasis on data-subject expectations + an effective right to object is satisfied. ✔
-- *Status:* Guidelines 1/2024 were in final consultation/adoption as of this writing; the three-part test is stable. Re-confirm wording on formal adoption.
 
 ### B.2 Identifiability — CJEU *SRB* relative test
 Applied throughout Appendix A: identifiability assessed by means reasonably likely for each holder. Result — anonymous to external parties; controller-side residual is time-bounded to the backup horizon. Consistent with the relative approach.
