@@ -20,7 +20,7 @@ jobs:
             echo "Already formatted, skipping"
             exit 0
           fi
-          new_title=$(printf '%s' "$TITLE" | sed -E 's/^deps: [Bb]ump ([^ ]+)( from .+)$/deps: bump `\1`\2/')
+          new_title=$(printf '%s' "$TITLE" | sed -E 's/^deps(\([^)]+\))?: [Bb]ump ([^ ]+)( from .+)$/deps\1: bump `\2`\3/')
           if [[ "$new_title" == "$TITLE" ]]; then
             echo "Title pattern did not match, skipping"
             exit 0
