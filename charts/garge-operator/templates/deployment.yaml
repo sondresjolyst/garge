@@ -42,10 +42,16 @@ spec:
           env:
             {{- range .Values.env }}
             - name: {{ .name }}
+              {{- if .secretKeyRef }}
               valueFrom:
                 secretKeyRef:
                   key: {{ .secretKeyRef.key }}
                   name: {{ .secretKeyRef.name }}
+              {{- else if hasKey . "value" }}
+              value: {{ .value | quote }}
+              {{- else }}
+              {{- fail (printf "env entry %s has neither value nor secretKeyRef" .name) }}
+              {{- end }}
             {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
