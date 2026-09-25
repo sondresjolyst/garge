@@ -52,16 +52,24 @@ spec:
           env:
             {{- range .Values.env }}
             - name: {{ .name }}
+              {{- if .secretKeyRef }}
               valueFrom:
                 secretKeyRef:
                   key: {{ .secretKeyRef.key }}
                   name: {{ .secretKeyRef.name }}
+              {{- else }}
+              value: {{ .value | quote }}
+              {{- end }}
             {{- end }}
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: home
+              mountPath: /home/app
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: home
           emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
