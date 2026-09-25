@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "garge-api.labels" . | nindent 4 }}
 spec:
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "garge-api.selectorLabels" . | nindent 6 }}
@@ -25,6 +26,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "garge-api.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -37,16 +39,44 @@ spec:
             - name: http
               containerPort: 7297
               protocol: TCP
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             {{- range .Values.env }}
             - name: {{ .name }}
+              {{- if .secretKeyRef }}
               valueFrom:
                 secretKeyRef:
                   key: {{ .secretKeyRef.key }}
                   name: {{ .secretKeyRef.name }}
+              {{- else if hasKey . "value" }}
+              value: {{ .value | quote }}
+              {{- else }}
+              {{- fail (printf "env entry %s has neither value nor secretKeyRef" .name) }}
+              {{- end }}
             {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: home
+              mountPath: /home/app
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: home
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
