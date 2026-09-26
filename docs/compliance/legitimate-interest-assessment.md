@@ -11,7 +11,7 @@
 | **Prepared by** | Engineering (Garge platform) |
 | **Status** | Controller-approved |
 | **Next review** | 2027-05-20, or on any change to the retention/anonymization design, or on relevant new regulatory guidance |
-| **Controller** | Sjølyst Innovations (trading as Garge), org. 934 531 035, Mårvegen 21a, 4347 Lye, Norway. Privacy contact: sondresjoelyst@gmail.com. No DPO designated (not required — see Art. 30 §1). Self-hosted; no upstream cloud processor for telemetry. |
+| **Controller** | Sjølyst Innovation AS (trading as Garge), org. 938 517 789, Mårvegen 21a, 4347 Lye, Norway. Privacy contact: sondresjoelyst@gmail.com. No DPO designated (not required — see Art. 30 §1). Self-hosted; no upstream cloud processor for telemetry. |
 | **Related docs** | DPIA `dpia-sensor-data.md`; Records of Processing `article30.md` (same folder). |
 
 ### Decisions (controller, 2026-05-21)
