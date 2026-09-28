@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: sondresjo/garge-operator
   pullPolicy: IfNotPresent
-  tag: "v1.9.0"
+  tag: "v1.10.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -15,9 +15,22 @@ podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext: {}
+automountServiceAccountToken: false
 
-securityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1654
+  runAsGroup: 1654
+  fsGroup: 1654
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
 
 service:
   type: ClusterIP

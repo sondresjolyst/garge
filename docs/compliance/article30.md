@@ -10,9 +10,9 @@
 
 | Field | Value |
 |---|---|
-| Legal name | Sjølyst Innovations |
+| Legal name | Sjølyst Innovation AS |
 | Trading name | Garge |
-| Org. number | 934 531 035 |
+| Org. number | 938 517 789 |
 | Address | Mårvegen 21a, 4347 Lye, Norway |
 | General contact | sondresjoelyst@gmail.com |
 | Privacy contact | sondresjoelyst@gmail.com |
@@ -139,7 +139,7 @@ No joint controllers. No DPO designated (not required — no special-category pr
 | Sendinblue SAS (Brevo) | France (EEA) | Transactional email delivery | Yes |
 | Google / Apple / Mozilla push services | Various | Web Push delivery (no DPA possible — browser-mediated; covered by user consent) | N/A |
 
-The Garge platform is **self-hosted** by Sjølyst Innovations on infrastructure under its own direct control. There is no upstream cloud or hosting provider in the chain.
+The Garge platform is **self-hosted** by Sjølyst Innovation AS on infrastructure under its own direct control. There is no upstream cloud or hosting provider in the chain.
 
 ## 5. Data subject rights — implementations
 

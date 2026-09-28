@@ -8,7 +8,7 @@ Controller/org-level data-protection documents for the Garge platform. They desc
 | [`dpia-sensor-data.md`](dpia-sensor-data.md) | Data Protection Impact Assessment (Art. 35) for continuous sensor-data processing. |
 | [`legitimate-interest-assessment.md`](legitimate-interest-assessment.md) | Legitimate Interest Assessment (Art. 6(1)(f)) + re-identification assessment for suspended-sensor retention and the anonymized ML store. |
 
-**Controller:** Sjølyst Innovations (trading as Garge), org. 934 531 035. No DPO designated (not required). Supervisory authority: Datatilsynet (Norway).
+**Controller:** Sjølyst Innovation AS (trading as Garge), org. 938 517 789. No DPO designated (not required). Supervisory authority: Datatilsynet (Norway).
 
 ## What lives where
 - **These governance records** are the single source of truth for how Garge processes personal data.

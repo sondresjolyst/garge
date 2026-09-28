@@ -1,9 +1,14 @@
 replicaCount: 1
 
+# Recreate, not RollingUpdate: the API applies pending EF migrations at startup,
+# so the old pod must stop before the new one migrates the schema.
+strategy:
+  type: Recreate
+
 image:
   repository: sondresjo/garge-api
   pullPolicy: IfNotPresent
-  tag: "v2.11.0"
+  tag: "v2.14.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -11,13 +16,51 @@ fullnameOverride: ""
 
 serviceAccount: {}
 
+automountServiceAccountToken: false
+
 podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1654
+  runAsGroup: 1654
+  fsGroup: 1654
+  seccompProfile:
+    type: RuntimeDefault
 
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Gives a slow start, such as a long database migration, room to finish before the
+# liveness probe can restart the pod.
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  periodSeconds: 10
+  failureThreshold: 30
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  periodSeconds: 20
+  timeoutSeconds: 3
+  failureThreshold: 3
 
 service:
   type: ClusterIP
