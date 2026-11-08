@@ -8,7 +8,7 @@ strategy:
 image:
   repository: sondresjo/garge-api
   pullPolicy: IfNotPresent
-  tag: "v2.22.1@sha256:61002482e9f616d5d1f935b61c2cf08aeb04c04ca4adba21b582abc30180fa74"
+  tag: "v2.22.2@sha256:29b405de9ea96290a6161690623815ce3c4206a9e9d32eed21d60d2f6ab55b4f"
 
 imagePullSecrets: []
 nameOverride: ""
