@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: sondresjo/garge-app
   pullPolicy: IfNotPresent
-  tag: "v1.27.0"
+  tag: "v1.28.0@sha256:dca6cb455468960d9a3e16cad0140f5ee3ed119d236ab6699f3c9614c1071a5c"
 
 imagePullSecrets: []
 nameOverride: ""
