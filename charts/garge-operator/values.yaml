@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: sondresjo/garge-operator
   pullPolicy: IfNotPresent
-  tag: "v1.12.5@sha256:d362d78ab765bfe3d58414e01b8520f15af2e3298464a3b452e9236ff611bdc4"
+  tag: "v1.12.6@sha256:9c6cc650b0b3749f6469b560dc781b50c009ccb1043008dc1b9d82435c51d987"
 
 imagePullSecrets: []
 nameOverride: ""
